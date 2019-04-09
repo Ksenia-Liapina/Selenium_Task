@@ -1,6 +1,8 @@
 import org.junit.After;
 import org.junit.Before;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Random;
@@ -48,6 +50,11 @@ public class BaseRunner {
     private final String CITY_FIELD_TEXT = "Город проживания";
     private final String EMAIL_FIELD_TEXT = "Электронная почта";
     private final String MOBILE_FIELD_TEXT = "Мобильный телефон";
+
+    protected WebElement getFormElement(WebDriver driver){
+        return driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Заполните " +
+                                                   "анкету'])[1]/following::div[2]"));
+    }
 
 
     protected void checkErrorText(String[] textFields, List<ErrorType> needCheckErrorTypes){

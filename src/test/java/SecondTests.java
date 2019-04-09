@@ -37,8 +37,7 @@ public class SecondTests extends BaseRunner {
         driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Заполните анкету'])[1]/following::form[1]")).click();
         driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='условиями передачи информации'])[1]/following::span[1]")).click();
 
-        WebElement e = driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Заполните " +
-                                                   "анкету'])[1]/following::div[2]"));
+        WebElement e = getFormElement(driver);
 
         List<ErrorType> errorTypes = Arrays.asList(ErrorType.NAME_ERROR, ErrorType.BIRTHDAY_ERROR, ErrorType
                 .EMAIL_VALIDATION_ERROR, ErrorType.MOBILE_PHONE_ERROR);

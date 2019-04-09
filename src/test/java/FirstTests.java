@@ -31,8 +31,7 @@ public class FirstTests extends BaseRunner {
         driver.findElement(By.name("email")).clear();
         driver.findElement(By.name("email")).sendKeys("12@ae.ru");
 
-        WebElement e = driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Заполните " +
-                                                   "анкету'])[1]/following::div[2]"));
+        WebElement e = getFormElement(driver);
 
         List<ErrorType> errorTypes = Collections.singletonList(ErrorType.MOBILE_PHONE_ERROR);
         checkErrorText(e.getText().split("\n"), errorTypes);
@@ -48,10 +47,9 @@ public class FirstTests extends BaseRunner {
         driver.findElement(By.name("phone")).click();
         driver.findElement(By.name("name")).click();
 
-        WebElement e = driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Заполните " +
-                                                   "анкету'])[1]/following::div[2]"));
+        WebElement e = getFormElement(driver);
 
-        List<ErrorType> errorTypes = Collections.singletonList(ErrorType.BIRTHDAY_ERROR);
+        List<ErrorType> errorTypes = Collections.singletonList(ErrorType.BIRTHDAY_REQUIRED_ERROR);
         checkErrorText(e.getText().split("\n"), errorTypes);
     }
 }
