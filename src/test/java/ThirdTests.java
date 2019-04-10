@@ -10,8 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 public class ThirdTests extends BaseRunner {
 
@@ -53,25 +52,33 @@ public class ThirdTests extends BaseRunner {
         driver.navigate().refresh();
         assertEquals("Москва и Московская область", getCurrentRegionTitle());
 
-        int defaultMoscowPrice = Integer.parseInt(getElementByPartText("Общая цена").getText().replaceAll("\\D+",""));
+        int defaultMoscowPrice = getPrice();
 
-        checkAll();
-        int fullMoscowPrice = Integer.parseInt(getElementByPartText("Общая цена").getText().replaceAll("\\D+",""));
+        turnOptions(true);
+
+        int fullMoscowPrice = getPrice();
 
         selectRegion("Краснодар");
-        int defaultKrasnodarPrice = Integer.parseInt(getElementByPartText("Общая цена").getText().replaceAll("\\D+", ""));
 
-        checkAll();
-        int fullKrasnodarPrice = Integer.parseInt(getElementByPartText("Общая цена").getText().replaceAll("\\D+",""));
+        int defaultKrasnodarPrice = getPrice();
+
+        turnOptions(true);
+
+        int fullKrasnodarPrice = getPrice();
+
         assertNotEquals(defaultMoscowPrice, defaultKrasnodarPrice);
         assertEquals(fullMoscowPrice, fullKrasnodarPrice);
     }
 
-    private void checkAll(){
+    private void turnOptions(final boolean enable){
         List<WebElement> checkBoxes = driver.findElements(By.cssSelector("div.CheckboxWithDescription__checkbox_2E0r_"));
         checkBoxes.forEach(checkBox -> {
             WebElement inputCheck = checkBox.findElement(By.cssSelector("input[type='checkbox']"));
-            if(!inputCheck.isSelected()){
+            if(!inputCheck.isSelected() && enable){
+                checkBox.findElement(By.cssSelector(":first-child")).click();
+            }
+
+            if(inputCheck.isSelected() && !enable){
                 checkBox.findElement(By.cssSelector(":first-child")).click();
             }
         });
@@ -82,7 +89,11 @@ public class ThirdTests extends BaseRunner {
             if(dropdown.getText().contains("Интернет")){
                 List<WebElement> selects = dropdown.findElements(By.cssSelector("div.ui-dropdown-field-list__item"));
                 selects.forEach(select -> {
-                    if(select.getText().contains("Безлимитный интернет")){
+                    if(select.getText().contains("Безлимитный интернет") && enable){
+                        select.click();
+                    }
+
+                    if(select.getText().contains("0 ГБ") && !enable){
                         select.click();
                     }
                 });
@@ -90,7 +101,11 @@ public class ThirdTests extends BaseRunner {
             if(dropdown.getText().contains("Звонки")){
                 List<WebElement> selects = dropdown.findElements(By.cssSelector("div.ui-dropdown-field-list__item"));
                 selects.forEach(select -> {
-                    if(select.getText().contains("Безлимитные минуты")){
+                    if(select.getText().contains("Безлимитные минуты") && enable){
+                        select.click();
+                    }
+
+                    if(select.getText().contains("0 минут") && !enable){
                         select.click();
                     }
                 });
@@ -119,26 +134,22 @@ public class ThirdTests extends BaseRunner {
        return driver.findElement(By.xpath(String.format("//*[text()[contains(.,'%s')]]", partText)));
     }
 
+    private int getPrice(){
+        return Integer.parseInt(getElementByPartText("Общая цена").getText().replaceAll("\\D+",""));
+    }
+
     @Test
     public void testButtonIsActive() {
         driver.get("https://www.tinkoff.ru/mobile-operator/tariffs/");
-        driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Интернет'])[1]/following::span[1]")).click();
-        driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='на&nbsp;30&nbsp;дней'])[1]/following::div[4]")).click();
-        driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Звонки'])[1]/following::span[1]")).click();
-        driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Интернет с данным пакетом недоступен'])[1]/following::div[2]")).click();
-        driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Безлимитный интернет в приложениях'])[1]/following::label[1]")).click();
-        driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='?'])[1]/following::label[1]")).click();
-        driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Заказать сим-карту'])[1]/following::div[3]")).click();
-        driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Выберите пакеты услуг'])[1]/following::form[1]")).click();
-        driver.findElement(By.name("fio")).click();
-        driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Выберите пакеты услуг'])[1]/following::form[1]")).click();
-        driver.findElement(By.name("fio")).clear();
-        driver.findElement(By.name("fio")).sendKeys("Иванов Александр Петрович");
-        driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Выберите пакеты услуг'])[1]/following::form[1]")).click();
-        driver.findElement(By.name("phone_mobile")).click();
-        driver.findElement(By.name("phone_mobile")).clear();
-        driver.findElement(By.name("phone_mobile")).sendKeys("+7(999) 999-99-99");
-        driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Заказать сим-карту'])[1]/following::div[2]")).click();
-        assertEquals("Тарифы Тинькофф Мобайла", driver.getTitle());
+        selectRegion("Москва");
+        turnOptions(false);
+
+        WebElement button = driver.findElement(By.name("form")).findElements(By.tagName("button")).stream()
+                                    .filter(but -> but.getText().equals("Заказать сим-карту"))
+                                    .findFirst()
+                                    .get();
+
+        assertEquals(0, getPrice());
+        assertTrue(button.isEnabled());
     }
 }
