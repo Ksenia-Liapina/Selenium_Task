@@ -1,3 +1,4 @@
+import components.TextInput;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -18,22 +19,13 @@ public class SecondTests extends BaseRunner {
         driver.findElement(By.name("phone")).click();
         driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Перетащите файлы сюда'])[1]/following::span[2]")).click();
         driver.findElement(By.cssSelector("svg.ui-icon-checkbox.ui-checkbox__icon")).click();
-        driver.findElement(By.name("name")).click();
-        driver.findElement(By.name("name")).clear();
-        driver.findElement(By.name("name")).sendKeys("Иван12");
+        new TextInput(driver.findElement(By.name("name"))).clearAndAddText("Иван12");
         driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Заполните анкету'])[1]/following::div[1]")).click();
-        driver.findElement(By.name("birthday")).click();
-        driver.findElement(By.name("birthday")).clear();
-        driver.findElement(By.name("birthday")).sendKeys("01.");
-        driver.findElement(By.name("city")).click();
-        driver.findElement(By.name("city")).sendKeys("г");
+        new TextInput(driver.findElement(By.name("birthday"))).clearAndAddText("01.");
+        new TextInput(driver.findElement(By.name("city"))).clearAndAddText("г");
         driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Заполните анкету'])[1]/following::div[1]")).click();
-        driver.findElement(By.name("email")).click();
-        driver.findElement(By.name("email")).clear();
-        driver.findElement(By.name("email")).sendKeys("123");
-        driver.findElement(By.name("phone")).click();
-        driver.findElement(By.name("phone")).clear();
-        driver.findElement(By.name("phone")).sendKeys("+7(123)");
+        new TextInput(driver.findElement(By.name("email"))).clearAndAddText("123");
+        new TextInput(driver.findElement(By.name("phone"))).clearAndAddText("+7(123)");
         driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Заполните анкету'])[1]/following::form[1]")).click();
         driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='условиями передачи информации'])[1]/following::span[1]")).click();
 
