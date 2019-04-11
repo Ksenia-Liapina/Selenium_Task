@@ -2,6 +2,6 @@
 
 ### строки запуска maven
 1.0 Запуск тестов в браузере хром с командной строки 
-``` -Dtest=FirstTests,SecondTests -Dbrowser=chrome verify ```
+``` -Dtest=FirstTests,SecondTests,ThirdTests -Dbrowser=chrome verify ```
 1.1 Запуск тестов в браузере мозила с командной строки 
-``` -Dtest=FirstTests,SecondTests -Dbrowser=firefox verify ```
+``` -Dtest=FirstTests,SecondTests,ThirdTests -Dbrowser=firefox verify ```
