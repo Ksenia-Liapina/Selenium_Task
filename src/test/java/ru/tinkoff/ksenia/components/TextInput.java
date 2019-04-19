@@ -1,4 +1,4 @@
-package components;
+package ru.tinkoff.ksenia.components;
 
 import org.openqa.selenium.WebElement;
 

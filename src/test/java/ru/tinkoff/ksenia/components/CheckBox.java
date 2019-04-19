@@ -1,7 +1,6 @@
-package components;
+package ru.tinkoff.ksenia.components;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class CheckBox {

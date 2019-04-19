@@ -1,3 +1,5 @@
+package ru.tinkoff.ksenia;
+
 public enum  ErrorType {
     NAME_ERROR, BIRTHDAY_REQUIRED_ERROR, BIRTHDAY_ERROR, EMAIL_VALIDATION_ERROR, MOBILE_PHONE_ERROR
 }

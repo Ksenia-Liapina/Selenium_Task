@@ -1,3 +1,5 @@
+package ru.tinkoff.ksenia;
+
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.By;
@@ -6,13 +8,11 @@ import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
 public class BaseRunner {
-
     private static ThreadLocal<WebDriver> tl = new ThreadLocal<>();
     WebDriver driver;
     private String browserName = System.getProperty("browser");
@@ -45,17 +45,11 @@ public class BaseRunner {
         return BrowsersFactory.valueOf(browserName).create();
     }
 
-
     private final String NAME_FIELD_TEXT = "Фамилия и имя";
     private final String BIRTHDAY_FIELD_TEXT = "Дата рождения";
     private final String CITY_FIELD_TEXT = "Город проживания";
     private final String EMAIL_FIELD_TEXT = "Электронная почта";
     private final String MOBILE_FIELD_TEXT = "Мобильный телефон";
-
-    protected WebElement getFormElement(WebDriver driver){
-        return driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Заполните " +
-                                                   "анкету'])[1]/following::div[2]"));
-    }
 
 
     protected void checkErrorText(String[] textFields, List<ErrorType> needCheckErrorTypes){
@@ -94,21 +88,6 @@ public class BaseRunner {
                     assertEquals("Номер телефона должен состоять из 10 цифр, начиная с кода оператора", textFields[i + 1]);
                     break;
                 }
-            }
-        }
-    }
-
-    protected WebElement getElementByPartText(final String partText){
-        return driver.findElement(By.xpath(String.format("//*[text()[contains(.,'%s')]]", partText)));
-    }
-
-    protected void goToNextTabAndCloseCurrent(){
-        List<String> pages = new ArrayList<>(driver.getWindowHandles());
-        for(int i = 0; i < pages.size(); i++){
-            if(pages.get(i).equals(driver.getWindowHandle())){
-                driver.close();
-                driver.switchTo().window(pages.get(i + 1));
-                break;
             }
         }
     }
